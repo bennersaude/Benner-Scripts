@@ -1,9 +1,7 @@
 #!/bin/bash
 
 branchPrefix="remotes/origin/"
-RELEASE_BRANCH=$(git branch -a | grep origin/release)
-RELEASE_BRANCH=${RELEASE_BRANCH//$branchPrefix/}
-RELEASE_BRANCH=$(echo "$RELEASE_BRANCH" | xargs)
+RELEASE_BRANCH=""
 
 CONFIGURATION="Loc.SqlS.Release"
 CONECTA_DIR="/e/Compart/Conecta/Conecta"
@@ -19,10 +17,18 @@ while getopts 'c:d:n:b:' flag; do
   esac
 done
 
-if [[ "$RELEASE_BRANCH" == *$'\n'* ]]; then
-    echo "Multiple release branches found"
-    exit 1
-fi
+function setReleaseBranch() {
+    if [[ -z "$RELEASE_BRANCH" ]]; then
+        RELEASE_BRANCH=$(git branch -a | grep origin/release)
+        RELEASE_BRANCH=${RELEASE_BRANCH//$branchPrefix/}
+        RELEASE_BRANCH=$(echo "$RELEASE_BRANCH" | xargs)
+    fi
+
+    if [[ "$RELEASE_BRANCH" == *$'\n'* ]]; then
+        echo "Multiple release branches found"
+        exit 1
+    fi
+}
 
 function exitIfLastHasError() {
     if [[ $? -ne 0 ]]; then
@@ -64,6 +70,8 @@ function updateDevelop() {
 function start() {
     pushd "$CONECTA_DIR"
     git fetch
+
+    setReleaseBranch
 
     if [[ $nextStep -le 1 ]]; then
         updateRelease 1

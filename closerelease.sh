@@ -1,9 +1,8 @@
 #!/bin/bash
 
 branchPrefix="remotes/origin/"
-RELEASE_BRANCH=$(git branch -a | grep origin/release)
-RELEASE_BRANCH=${RELEASE_BRANCH//$branchPrefix/}
-RELEASE_BRANCH=$(echo "$RELEASE_BRANCH" | xargs)
+RELEASE_BRANCH=""
+RELEASE_NUMBER=""
 
 CONFIGURATION="Loc.SqlS.Release"
 CONECTA_DIR="/e/Compart/Conecta/Conecta"
@@ -19,13 +18,21 @@ while getopts 'c:d:n:b:' flag; do
   esac
 done
 
-if [[ "$RELEASE_BRANCH" == *$'\n'* ]]; then
-    echo "Multiple release branches found"
-    exit 1
-fi
+function setReleaseBranch() {
+    if [[ -z "$RELEASE_BRANCH" ]]; then
+        RELEASE_BRANCH=$(git branch -a | grep origin/release)
+        RELEASE_BRANCH=${RELEASE_BRANCH//$branchPrefix/}
+        RELEASE_BRANCH=$(echo "$RELEASE_BRANCH" | xargs)
+    fi
 
-RELEASE_NUMBER=$(echo $RELEASE_BRANCH | grep -oP "\d+$")
-RELEASE_NUMBER=$((RELEASE_NUMBER+1))
+    if [[ -z "$RELEASE_BRANCH" || "$RELEASE_BRANCH" == *$'\n'* ]]; then
+        echo "Multiple release branches found"
+        exit 1
+    fi
+
+    RELEASE_NUMBER=$(echo $RELEASE_BRANCH | grep -oP "\d+$")
+    RELEASE_NUMBER=$((RELEASE_NUMBER+1))
+}
 
 function exitIfLastHasError() {
     if [[ $? -ne 0 ]]; then
@@ -75,6 +82,8 @@ function createNewReleaseBranch() {
 function start() {
     pushd "$CONECTA_DIR"
     git fetch
+
+    setReleaseBranch
 
     if [[ $nextStep -le 1 ]]; then
         updateMaster 1
