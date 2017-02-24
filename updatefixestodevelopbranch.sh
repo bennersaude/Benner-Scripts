@@ -20,13 +20,13 @@ done
 function setReleaseBranch() {
     if [[ -z "$RELEASE_BRANCH" ]]; then
         RELEASE_BRANCH=$(git branch -a | grep origin/release)
+        if [[ "$RELEASE_BRANCH" == *$'\n'* ]]; then
+            echo "Multiple release branches found"
+            exit 1
+        fi
+
         RELEASE_BRANCH=${RELEASE_BRANCH//$branchPrefix/}
         RELEASE_BRANCH=$(echo "$RELEASE_BRANCH" | xargs)
-    fi
-
-    if [[ "$RELEASE_BRANCH" == *$'\n'* ]]; then
-        echo "Multiple release branches found"
-        exit 1
     fi
 }
 
@@ -43,72 +43,56 @@ function iexit() {
     exit $1
 }
 
-function buildInternal() {
-    build.sh -f "Conecta-coverage.sln" -p "//p:Configuration=$CONFIGURATION //p:OutputPath=bin\\$CONFIGURATION"
+function updateBranch() {
+    git checkout "$2"
+    git reset --hard origin/"$2"
     exitIfLastHasError "$1"
 }
 
-function runTestsInternal() {
-    runtestsfromconecta.sh -d "." -c "$CONFIGURATION"
+function updateCurrentBranchWith() {
+    git pull origin "$2"
     exitIfLastHasError "$1"
+    git push origin :$(git rev-parse --abbrev-ref HEAD)
+    git push -u origin $(git rev-parse --abbrev-ref HEAD)
 }
 
-function updateRelease() {
-    git checkout $RELEASE_BRANCH
-    git reset --hard origin/$RELEASE_BRANCH
-    git pull origin master
-    exitIfLastHasError "$1"
-}
-
-function updateDevelop() {
-    git checkout develop
-    git reset --hard origin/develop
-    git pull origin $RELEASE_BRANCH
+function createUpdateBranch() {
+    git branch -D "$2-updated" || :
+    git checkout -b "$2-updated"
     exitIfLastHasError "$1"
 }
 
 function start() {
     pushd "$CONECTA_DIR"
-    git fetch
-
+    git fetch --prune
+    
     setReleaseBranch
 
+
     if [[ $nextStep -le 1 ]]; then
-        updateRelease 1
+        updateBranch 1 $RELEASE_BRANCH
     fi
 
     if [[ $nextStep -le 2 ]]; then
-        git checkout $RELEASE_BRANCH
-        buildInternal 2
+        createUpdateBranch 2 $RELEASE_BRANCH
     fi
 
     if [[ $nextStep -le 3 ]]; then
-        git checkout $RELEASE_BRANCH
-        runTestsInternal 3
+        updateCurrentBranchWith 3 "master"
+        git pr
     fi
 
     if [[ $nextStep -le 4 ]]; then
-        git checkout $RELEASE_BRANCH
-        git push origin $RELEASE_BRANCH --no-verify
+        updateBranch 4 "develop"
     fi
 
     if [[ $nextStep -le 5 ]]; then
-        updateDevelop 5
+        createUpdateBranch 5 "develop"
     fi
 
     if [[ $nextStep -le 6 ]]; then
-        git checkout develop
-        buildInternal 6
-    fi
-
-    if [[ $nextStep -le 7 ]]; then
-        git checkout develop
-        runTestsInternal 7
-    fi
-
-    if [[ $nextStep -le 8 ]]; then
-        git checkout develop
-        git push origin develop --no-verify
+        updateCurrentBranchWith 6 $RELEASE_BRANCH
+        git pr
     fi
 
     popd

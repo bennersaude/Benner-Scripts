@@ -21,13 +21,13 @@ done
 function setReleaseBranch() {
     if [[ -z "$RELEASE_BRANCH" ]]; then
         RELEASE_BRANCH=$(git branch -a | grep origin/release)
+        if [[ -z "$RELEASE_BRANCH" || "$RELEASE_BRANCH" == *$'\n'* ]]; then
+            echo "Multiple release branches found"
+            exit 1
+        fi
+
         RELEASE_BRANCH=${RELEASE_BRANCH//$branchPrefix/}
         RELEASE_BRANCH=$(echo "$RELEASE_BRANCH" | xargs)
-    fi
-
-    if [[ -z "$RELEASE_BRANCH" || "$RELEASE_BRANCH" == *$'\n'* ]]; then
-        echo "Multiple release branches found"
-        exit 1
     fi
 
     RELEASE_NUMBER=$(echo $RELEASE_BRANCH | grep -oP "\d+$")
@@ -81,7 +81,7 @@ function createNewReleaseBranch() {
 
 function start() {
     pushd "$CONECTA_DIR"
-    git fetch
+    git fetch --prune
 
     setReleaseBranch
 
