@@ -1,8 +1,9 @@
 #!/bin/bash
 
-branchPrefix="remotes/origin/"
-RELEASE_BRANCH=""
+my_dir="$(dirname "$0")"
+source "$my_dir/utils.sh"
 
+RELEASE_BRANCH=""
 CONFIGURATION="Loc.SqlS.Release"
 CONECTA_DIR="/e/Compart/Conecta/Conecta"
 nextStep="1"
@@ -16,34 +17,6 @@ while getopts 'c:d:n:b:' flag; do
     *) error "Unexpected option ${flag}" ;;
   esac
 done
-
-
-function setReleaseBranch() {
-    if [[ -z "$RELEASE_BRANCH" ]]; then
-        RELEASE_BRANCH=$(git branch -a | grep origin/release)
-        if [[ "$RELEASE_BRANCH" == *$'\n'* ]]; then
-            echo "Multiple release branches found"
-            exit 1
-        fi
-
-        RELEASE_BRANCH=${RELEASE_BRANCH//$branchPrefix/}
-        RELEASE_BRANCH=$(echo "$RELEASE_BRANCH" | xargs)
-    fi
-
-    echo "Using release branch: $RELEASE_BRANCH"
-}
-
-function exitIfLastHasError() {
-    if [[ $? -ne 0 ]]; then
-        iexit "$1"
-    fi
-}
-
-function iexit() {
-    echo "Exit with code $1"
-    echo "Re-run passing $1 to continue..."
-    exit $1
-}
 
 function updateBranch() {
     git checkout "$2"
@@ -72,8 +45,8 @@ function start() {
     pushd "$CONECTA_DIR"
     git fetch --prune
     
-    setReleaseBranch
-
+    RELEASE_BRANCH="$(getReleaseBranch $RELEASE_BRANCH)"
+    echo "Using release branch: $RELEASE_BRANCH"
 
     if [[ $nextStep -le 1 ]]; then
         updateBranch 1 $RELEASE_BRANCH
