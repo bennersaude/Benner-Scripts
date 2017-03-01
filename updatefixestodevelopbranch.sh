@@ -17,6 +17,7 @@ while getopts 'c:d:n:b:' flag; do
   esac
 done
 
+
 function setReleaseBranch() {
     if [[ -z "$RELEASE_BRANCH" ]]; then
         RELEASE_BRANCH=$(git branch -a | grep origin/release)
@@ -39,7 +40,6 @@ function exitIfLastHasError() {
 function iexit() {
     echo "Exit with code $1"
     echo "Re-run passing $1 to continue..."
-    popd
     exit $1
 }
 
@@ -49,10 +49,14 @@ function updateBranch() {
     exitIfLastHasError "$1"
 }
 
+function deleteBranchRemote() {
+    git push origin :"$1"
+}
+
 function updateCurrentBranchWith() {
     git pull origin "$2"
     exitIfLastHasError "$1"
-    git push origin :$(git rev-parse --abbrev-ref HEAD)
+    deleteBranchRemote $(git rev-parse --abbrev-ref HEAD)
     git push -u origin $(git rev-parse --abbrev-ref HEAD)
 }
 
@@ -83,6 +87,17 @@ function start() {
     fi
 
     if [[ $nextStep -le 4 ]]; then
+        read -p "Release precisa ser atualizada (s/n)? " answer
+        case ${answer:0:1} in
+            y|Y|s|S )
+                iexit 4
+            ;;
+            * )
+                deleteBranchRemote "$RELEASE_BRANCH-updated"
+                echo "Continuando..."
+            ;;
+        esac
+
         updateBranch 4 "develop"
     fi
 
