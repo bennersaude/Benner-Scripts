@@ -29,6 +29,8 @@ function setReleaseBranch() {
         RELEASE_BRANCH=${RELEASE_BRANCH//$branchPrefix/}
         RELEASE_BRANCH=$(echo "$RELEASE_BRANCH" | xargs)
     fi
+
+    echo "Using release branch: $RELEASE_BRANCH"
 }
 
 function exitIfLastHasError() {
