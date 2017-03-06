@@ -36,8 +36,8 @@ function updateCurrentBranchWith() {
 }
 
 function createUpdateBranch() {
-    git branch -D "$2-updated" || :
-    git checkout -b "$2-updated"
+    git branch -D "propagateChangesFromBaseBranch-$2" || :
+    git checkout -b "propagateChangesFromBaseBranch-$2"
     exitIfLastHasError "$1"
 }
 
@@ -45,7 +45,7 @@ function start() {
     pushd "$CONECTA_DIR"
     git fetch --prune
     
-    RELEASE_BRANCH="$(getReleaseBranch $RELEASE_BRANCH)"
+    RELEASE_BRANCH="$(getReleaseBranch $RELEASE_BRANCH)" || (echo "$RELEASE_BRANCH" && exit $?)
     echo "Using release branch: $RELEASE_BRANCH"
 
     if [[ $nextStep -le 1 ]]; then
@@ -68,7 +68,7 @@ function start() {
                 iexit 4
             ;;
             * )
-                deleteBranchRemote "$RELEASE_BRANCH-updated"
+                deleteBranchRemote "propagateChangesFromBaseBranch-$RELEASE_BRANCH"
                 echo "Continuando..."
             ;;
         esac
