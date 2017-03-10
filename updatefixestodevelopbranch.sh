@@ -72,17 +72,31 @@ function start() {
                 echo "Continuando..."
             ;;
         esac
-
-        updateBranch 4 "develop"
     fi
 
     if [[ $nextStep -le 5 ]]; then
-        createUpdateBranch 5 "develop"
+        updateBranch 5 "develop"
     fi
 
     if [[ $nextStep -le 6 ]]; then
-        updateCurrentBranchWith 6 $RELEASE_BRANCH
+        createUpdateBranch 6 "develop"
+    fi
+
+    if [[ $nextStep -le 7 ]]; then
+        updateCurrentBranchWith 7 $RELEASE_BRANCH
         git pr
+    fi
+
+    if [[ $nextStep -le 8 ]]; then
+        read -p "Develop precisa ser atualizada (s/n)? " answer
+        case ${answer:0:1} in
+            y|Y|s|S )
+                iexit 8
+            ;;
+            * )
+                deleteBranchRemote "propagateChangesFromBaseBranch-develop"
+            ;;
+        esac
     fi
 
     popd
