@@ -5,7 +5,7 @@ source "$my_dir/utils.sh"
 
 IISEXPRESS=/c/Program\ Files/IIS\ Express/iisexpress.exe
 
-killiisexpress.sh
+iiskill.sh
 
 pushd /c/workspace/Conecta
 build.sh -f Benner.Conecta.Portal/Benner.Conecta.Portal.csproj -p "//p:SolutionDir=C:\workspace\Conecta\\"
