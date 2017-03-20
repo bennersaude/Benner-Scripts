@@ -1,9 +1,8 @@
 #!/bin/bash
 
 my_dir="$(dirname "$0")"
+source "$my_dir/configs.sh"
 source "$my_dir/utils.sh"
-
-IISEXPRESS=/c/Program\ Files/IIS\ Express/iisexpress.exe
 
 iiskill.sh
 

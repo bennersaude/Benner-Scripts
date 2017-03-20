@@ -1,5 +1,9 @@
 #!/bin/bash
 
+my_dir="$(dirname "$0")"
+source "$my_dir/configs.sh"
+source "$my_dir/utils.sh"
+
 if [[ -z "$1" ]]; then
     echo "Invalid build attempt: missing file."
     exit 1
@@ -30,16 +34,13 @@ fi
 filenameWithoutDir=$(basename "$filename")
 directory=$(dirname "$filename")
 
-nuget='./.nuget/NuGet.exe'
-msbuild='/c/Program Files (x86)/MSBuild/14.0/Bin/MSBuild.exe'
-
 if [[ -z "$solutiondir" ]]; then
 	$nuget restore "$filename"
 else
 	"$directory/.nuget/Nuget.exe" restore "$filename"
 fi
 
-"$msbuild" $filename $params //v:minimal //m
+"$MSBUILD" $filename $params //v:minimal //m
 ECODE="$(echo $?)"
 
 if [[ -n "$solutiondir" ]]; then
@@ -47,7 +48,7 @@ if [[ -n "$solutiondir" ]]; then
 fi
 
 echo "Build from: $PWD"
-echo "Build command: $msbuild $filename $params //v:minimal //m"
+echo "Build command: $MSBUILD $filename $params //v:minimal //m"
 
 echo "Build finished with exit code $ECODE"
 

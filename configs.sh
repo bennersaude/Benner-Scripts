@@ -1,7 +1,6 @@
 CONECTA_DIR="/c/workspace/Conecta"
 ALTERNATIVE_CONECTA_DIR="/e/Compart/Conecta/Conecta"
 
-msbuild='/c/Program Files (x86)/MSBuild/14.0/Bin/MSBuild.exe' # remove-me
 MSBUILD='/c/Program Files (x86)/MSBuild/14.0/Bin/MSBuild.exe'
 IISEXPRESS=/c/Program\ Files/IIS\ Express/iisexpress.exe
 
