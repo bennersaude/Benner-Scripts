@@ -26,5 +26,6 @@ if [[ -z "$publishPath" ]]; then
 fi
 
 pushd "$solutiondir"
-build.sh -d "$solutiondir" -f "$filename" -p "//p:Configuration=$CONFIGURATION //p:OutputPath=obj\\$CONFIGURATION //t:WebPublish //p:WebPublishMethod=FileSystem //p:DeleteExistingFiles=True //p:publishUrl=$publishPath //p:SolutionDir=$(echo $PWD | sed -r 's/^\/(\w)/\1:/' | sed -r 's/\//\\/g' | sed -r 's/\\$//')\\"
+windowsSolutionPath=$(convertPathToWindows "$solutiondir")
+build.sh -d "$solutiondir" -f "$filename" -p "//p:Configuration=$CONFIGURATION //p:OutputPath=obj\\$CONFIGURATION //t:WebPublish //p:WebPublishMethod=FileSystem //p:DeleteExistingFiles=True //p:publishUrl=$publishPath //p:SolutionDir=$windowsSolutionPath\\"
 popd

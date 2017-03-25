@@ -1,5 +1,8 @@
 CONECTA_DIR="/c/workspace/Conecta"
 ALTERNATIVE_CONECTA_DIR="/e/Compart/Conecta/Conecta"
+INFRA_DIR="/c/workspace/Benner.Infra"
+
+RELEASE_BRANCH='release/Sprint29'
 
 MSBUILD='/c/Program Files (x86)/MSBuild/14.0/Bin/MSBuild.exe'
 IISEXPRESS=/c/Program\ Files/IIS\ Express/iisexpress.exe
@@ -8,3 +11,4 @@ IISEXPRESS=/c/Program\ Files/IIS\ Express/iisexpress.exe
 nuget='./.nuget/NuGet.exe'
 DEFAULT_PUBLISH_CONFIGURATION='Loc.SqlS.Release'
 DEFAULT_PUBLISH_PATH='C:\inetpub\wwwroot\Conecta'
+SITE_NAME='Benner.Conecta.Portal-Site'
