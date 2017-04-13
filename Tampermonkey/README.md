@@ -4,4 +4,4 @@ Este script visa melhorar a usabilidade da tela de situações do SISCON, realiz
   * Notificar quando houver acúmulo de atividades
   * Remover colunas redundantes como Recurso
   * Etc...
-  ![Imagem tela situação](https://octodex.github.com/images/yaktocat.png)
+  ![Imagem tela situação](https://raw.githubusercontent.com/guilherme-valdevieso/Benner-Scripts/master/Tampermonkey/tela-situacoes.png)
