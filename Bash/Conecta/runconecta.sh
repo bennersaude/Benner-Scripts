@@ -5,9 +5,8 @@ source "$my_dir/configs.sh"
 source "$my_dir/utils.sh"
 
 pushd "$CONECTA_DIR"
-windowsSolutionPath=$(convertPathToWindows "$CONECTA_DIR")
-build.sh -f Benner.Conecta.Portal/Benner.Conecta.Portal.csproj -p "//p:SolutionDir=$windowsSolutionPath\\"
-exitIfLastHasError 1
+
+# KILL IISEXPRESS
 
 #iiskill.sh
 
@@ -16,5 +15,12 @@ exitIfLastHasError 1
 
 WMIC path win32_process get Caption,Processid,Commandline | grep -P "iisexpress.exe.*?/site:\"{0,1}$SITE_NAME" | grep -Po "\d+\s*$" | xargs -I{} taskkill //F //PID {}
 
+# Build Portal
+windowsSolutionPath=$(convertPathToWindows "$CONECTA_DIR")
+build.sh -f Benner.Conecta.Portal/Benner.Conecta.Portal.csproj -p "//p:SolutionDir=$windowsSolutionPath\\"
+exitIfLastHasError 1
+
+# Start IISEXPRESS
 start bash -c "cd $CONECTA_DIR; \"$IISEXPRESS\" \"//site:$SITE_NAME\" \"//config:.vs\config\applicationhost.config\""
+
 popd
