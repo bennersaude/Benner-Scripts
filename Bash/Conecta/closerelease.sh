@@ -1,11 +1,15 @@
 #!/bin/bash
 
+my_dir="$(dirname "$0")"
+source "$my_dir/configs.sh"
+source "$my_dir/utils.sh"
+
 branchPrefix="remotes/origin/"
 RELEASE_BRANCH=""
 RELEASE_NUMBER=""
 
-CONFIGURATION="Loc.SqlS.Release"
-CONECTA_DIR="/e/Compart/Conecta/Conecta"
+CONFIGURATION="$DEFAULT_PUBLISH_CONFIGURATION"
+CONECTA_DIR="$ALTERNATIVE_CONECTA_DIR"
 nextStep="1"
 
 while getopts 'c:d:n:b:' flag; do
@@ -19,25 +23,11 @@ while getopts 'c:d:n:b:' flag; do
 done
 
 function setReleaseBranch() {
-    if [[ -z "$RELEASE_BRANCH" ]]; then
-        RELEASE_BRANCH=$(git branch -a | grep origin/release)
-        if [[ -z "$RELEASE_BRANCH" || "$RELEASE_BRANCH" == *$'\n'* ]]; then
-            echo "Multiple release branches found"
-            exit 1
-        fi
-
-        RELEASE_BRANCH=${RELEASE_BRANCH//$branchPrefix/}
-        RELEASE_BRANCH=$(echo "$RELEASE_BRANCH" | xargs)
-    fi
+    RELEASE_BRANCH="$(getReleaseBranch $RELEASE_BRANCH)" || (echo "$RELEASE_BRANCH" && exit $?)
+    echo "Using release branch: $RELEASE_BRANCH"
 
     RELEASE_NUMBER=$(echo $RELEASE_BRANCH | grep -oP "\d+$")
     RELEASE_NUMBER=$((RELEASE_NUMBER+1))
-}
-
-function exitIfLastHasError() {
-    if [[ $? -ne 0 ]]; then
-        iexit "$1"
-    fi
 }
 
 function iexit() {
@@ -48,7 +38,7 @@ function iexit() {
 }
 
 function buildInternal() {
-    build.sh -f "Conecta-coverage.sln" -p "//p:Configuration=$CONFIGURATION //p:OutputPath=bin\\$CONFIGURATION"
+    build.sh -f "Conecta-coverage.sln" -p "//p:Configuration=$CONFIGURATION //p:OutputPath=obj\\$CONFIGURATION"
     exitIfLastHasError "$1"
 }
 

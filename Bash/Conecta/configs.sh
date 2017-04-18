@@ -2,7 +2,7 @@ CONECTA_DIR="/c/workspace/Conecta"
 ALTERNATIVE_CONECTA_DIR="/e/Compart/Conecta/Conecta"
 INFRA_DIR="/c/workspace/Benner.Infra"
 
-RELEASE_BRANCH='release/Sprint29'
+RELEASE_BRANCH='release/Sprint30'
 
 MSBUILD='/c/Program Files (x86)/MSBuild/14.0/Bin/MSBuild.exe'
 IISEXPRESS=/c/Program\ Files/IIS\ Express/iisexpress.exe
