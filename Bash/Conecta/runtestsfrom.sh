@@ -12,10 +12,10 @@ end_time=`date +%s`
 ECODE="$(echo $?)"
 
 if [[ $ECODE -eq 0 ]]; then
-	echo "$TRESULT"
+    echo "$TRESULT" | awk '!/ Ignored : / && !/ NotRunnable : /'
+else
+    echo "$TRESULT" | grep -oP '^[0-9]+\)[^\(]*' | awk '!/ Ignored : / && !/ NotRunnable : /'
 fi
-
-echo "$TRESULT" | grep -oP '^[0-9]+\)[^\(]*'
 
 echo "Tests finished in "`expr $end_time - $start_time`" s with exit code $ECODE"
 
