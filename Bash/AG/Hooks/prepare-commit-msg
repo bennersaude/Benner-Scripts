@@ -1,0 +1,30 @@
+#!/bin/sh
+#
+# - Automaticamente adiciona o nome do branch ao commits, exceto commits de merge.
+#---------------------------------------------------------------------------------
+# since:  2017-05-04 11:25 (GMT -03:00)
+# author: Heber Gonçalves Junior
+###################################################################################
+
+COMMIT_EDITMSG=$1
+
+addBranchName() {
+  NAME=$(git rev-parse --abbrev-ref HEAD)
+  echo "$NAME | $(cat $COMMIT_EDITMSG)" > $COMMIT_EDITMSG
+}
+
+removeOldBranchName() {
+  echo "$(cat $COMMIT_EDITMSG |sed 's/^[^|]*| //')" > $COMMIT_EDITMSG
+}
+
+CLEAN=$(cat $COMMIT_EDITMSG |grep '^SMS:' |wc -l)
+MERGE=$(cat $COMMIT_EDITMSG |grep -i 'merge'|wc -l)
+
+if [ $MERGE -eq 0 ] ; then
+  if [ $CLEAN -eq 0] ; then
+    addBranchName
+  else
+	removeOldBranchName
+	addBranchName
+  fi
+fi
