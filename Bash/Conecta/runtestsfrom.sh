@@ -8,8 +8,8 @@ echo "Running tests..."
 
 start_time=`date +%s`
 TRESULT="$(/c/Program\ Files\ \(x86\)/NUnit\ 2.6.4/bin/nunit-console $1 //nologo)"
-end_time=`date +%s`
 ECODE="$(echo $?)"
+end_time=`date +%s`
 
 if [[ $ECODE -eq 0 ]]; then
     echo "$TRESULT" | awk '!/ Ignored : / && !/ NotRunnable : /'
