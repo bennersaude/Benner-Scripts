@@ -30,13 +30,6 @@ function setReleaseBranch() {
     RELEASE_NUMBER=$((RELEASE_NUMBER+1))
 }
 
-function iexit() {
-    echo "Exit with code $1"
-    echo "Re-run passing $1 to continue..."
-    popd
-    exit $1
-}
-
 function buildInternal() {
     build.sh -f "Conecta-coverage.sln" -p "//p:Configuration=$CONFIGURATION //p:OutputPath=obj\\$CONFIGURATION"
     exitIfLastHasError "$1"

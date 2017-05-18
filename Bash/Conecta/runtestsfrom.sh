@@ -1,13 +1,23 @@
 #!/bin/bash
+
+my_dir="$(dirname "$0")"
+source "$my_dir/configs.sh"
+
+DLLS=''
 if [[ -z "$1" ]]; then
     echo "No dlls/projects found. Try passing as the first parameter.";
     exit 1;
+fi
+if [[ "$1" == *dll ]]; then
+    DLLS="$1";
+else
+    DLLS="$(find **/bin/$1 -iname '*Tests.dll' -o -iname '*Test.dll' | tr '\n' ' ')";
 fi
 
 echo "Running tests..."
 
 start_time=`date +%s`
-TRESULT="$(/c/Program\ Files\ \(x86\)/NUnit\ 2.6.4/bin/nunit-console $1 //nologo)"
+TRESULT="$("$NUNIT_EXE" $DLLS //nologo)"
 ECODE="$(echo $?)"
 end_time=`date +%s`
 

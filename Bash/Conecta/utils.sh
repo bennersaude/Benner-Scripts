@@ -32,9 +32,11 @@ function getReleaseBranch() {
 
 function convertPathToWindows() {
     if [[ -z "$1" ]]; then
-        echo "No path found at 'convertPathToWindows' function"
+        echoerr "No path found at '$FUNCNAME' function"
         exit 1
     fi
 
     echo "$1" | sed -r 's/^\/(\w)/\1:/' | sed -r 's/\//\\/g' | sed -r 's/\\$//'
 }
+
+function echoerr() { echo "$@" 1>&2; }
