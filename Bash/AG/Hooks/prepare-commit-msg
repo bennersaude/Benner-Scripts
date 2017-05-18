@@ -21,7 +21,7 @@ CLEAN=$(cat $COMMIT_EDITMSG |grep '^SMS:' |wc -l)
 MERGE=$(cat $COMMIT_EDITMSG |grep -i 'merge'|wc -l)
 
 if [ $MERGE -eq 0 ] ; then
-  if [ $CLEAN -eq 0] ; then
+  if [ $CLEAN -eq 0 ] ; then
     addBranchName
   else
 	removeOldBranchName

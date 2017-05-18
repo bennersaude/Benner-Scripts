@@ -16,9 +16,9 @@
       Usage: ./InstallAgHooks.sh [OPTIONS]
 
       Options:
-        -i  | --interative : Ativa o modo interativo, pede confirmação para cada repositório
-	-dm | --disable-maxdepth : Desativa o limite padrão na profundidade da busca por repositórios (pasta .git)
-	                            O padrão são 2 níveis (ex: Ag\.git, AgProcedures\.git)
+        -di | --disable-interative : Desativa o modo interativo, não pede confirmação para cada repositório.
+	-ld | --limit-depth : Limita a profundidade da busca por repositórios (pasta .git) para 2 níveis.
+	                       (ex: Ag\.git, AgProcedures\.git)
     "
     exit 0
 }
@@ -28,8 +28,8 @@ InstallHooksToDir () {
 }
 
 
-INTERATIVE_MODE=false
-MAXDEPTH_ACTIVE=true
+INTERATIVE_MODE=true
+MAXDEPTH_ACTIVE=false
 
 LISTA_URL_HOOKS="
   https://raw.githubusercontent.com/bennersaude/Benner-Scripts/master/Bash/AG/Hooks/prepare-commit-msg
@@ -44,11 +44,11 @@ fi
 for option in "$@"
 do
   case $option in
-    "-i"|"--interative")
-      INTERATIVE_MODE=true
+    "-di"|"--disable-interative")
+      INTERATIVE_MODE=false
       ;;
-    "-dm"|"--disable-maxdepth")
-      MAXDEPTH_ACTIVE=false
+    "-ld"|"--limit-depth")
+      MAXDEPTH_ACTIVE=true
       ;;
     *)
       PrintUsage
