@@ -11,7 +11,7 @@ fi
 if [[ "$1" == *dll ]]; then
     DLLS="$1";
 else
-    DLLS="$(find **/bin/$1 -iname '*Tests.dll' -o -iname '*Test.dll' | tr '\n' ' ')";
+    DLLS="$(find **/bin/$1 -iname '*Tests.dll' -o -iname '*Test.dll' -o -iname '*TesteUnitario.dll' | tr '\n' ' ')";
 fi
 
 echo "Running tests..."
