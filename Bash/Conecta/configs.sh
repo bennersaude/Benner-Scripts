@@ -7,6 +7,7 @@ RELEASE_BRANCH='release/Sprint31'
 MSBUILD='/c/Program Files (x86)/MSBuild/14.0/Bin/MSBuild.exe'
 IISEXPRESS=/c/Program\ Files/IIS\ Express/iisexpress.exe
 NUNIT_EXE=/c/Program\ Files\ \(x86\)/NUnit\ 2.6.4/bin/nunit-console.exe
+ASP_NET_COMPILER=/c/Windows/Microsoft.NET/Framework64/v4.0.30319/aspnet_compiler.exe
 
 # Não alterar a não ser que saiba exatamente o que está fazendo.
 nuget='./.nuget/NuGet.exe'

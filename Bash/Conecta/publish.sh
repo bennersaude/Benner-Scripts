@@ -25,7 +25,15 @@ if [[ -z "$publishPath" ]]; then
 	publishPath="$DEFAULT_PUBLISH_PATH"
 fi
 
+publishPathRaw="$publishPath"RAW
+
 pushd "$solutiondir"
+
+function build() {
+  build.sh -d "$solutiondir" -f "$filename" -p "//p:Configuration=$CONFIGURATION //p:OutputPath=bin\\ //t:WebPublish //p:WebPublishMethod=FileSystem //p:DeleteExistingFiles=True //p:publishUrl=$publishPathRaw //p:SolutionDir=$windowsSolutionPath\\"
+}
+
 windowsSolutionPath=$(convertPathToWindows "$solutiondir")
-build.sh -d "$solutiondir" -f "$filename" -p "//p:Configuration=$CONFIGURATION //p:OutputPath=obj\\$CONFIGURATION //t:WebPublish //p:WebPublishMethod=FileSystem //p:DeleteExistingFiles=True //p:publishUrl=$publishPath //p:SolutionDir=$windowsSolutionPath\\"
+build && $ASP_NET_COMPILER -v // -p "$publishPathRaw" -c -f "$publishPath"
+
 popd
