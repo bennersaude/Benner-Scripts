@@ -5,8 +5,6 @@ alias msbuild='"$MSBUILD"'
 alias gti=git
 alias gbpurge='git branch --merged | grep -Ev "(\*|master|develop|staging)" | xargs -n 1 git branch -d'
 alias gbpurgeextended='git branch -vv | grep -P "\[origin.*?: gone\]" | grep -oP "^\s*(hotfix|SMS)[^\s]+" | xargs -n 1 git branch -D'
-alias gcheckoutsextended='git reflog --pretty="%gs" | grep "checkout: moving from" | sed -e "s/^checkout: moving from//" -e "s/ to / --> /" | tac'
-alias gcheckouts='gcheckoutsextended | grep -oP "\s[^\s]+$"'
 
 alias bconecta='cd $CONECTA_DIR'
 alias binfra='cd $INFRA_DIR'
