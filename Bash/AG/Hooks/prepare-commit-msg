@@ -9,15 +9,15 @@
 COMMIT_EDITMSG=$1
 
 addBranchName() {
-  NAME=$(git rev-parse --abbrev-ref HEAD)
-  echo "$NAME | $(cat $COMMIT_EDITMSG)" > $COMMIT_EDITMSG
+  BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD | sed 's|SMS/||')
+  echo "SMS $BRANCH_NAME: $(cat $COMMIT_EDITMSG)" > $COMMIT_EDITMSG
 }
 
 removeOldBranchName() {
-  echo "$(cat $COMMIT_EDITMSG |sed 's/^[^|]*| //')" > $COMMIT_EDITMSG
+  echo "$(cat $COMMIT_EDITMSG |sed 's/^[^:]*: //')" > $COMMIT_EDITMSG
 }
 
-CLEAN=$(cat $COMMIT_EDITMSG |grep '^SMS:' |wc -l)
+CLEAN=$(cat $COMMIT_EDITMSG |grep '^SMS ' |wc -l)
 MERGE=$(cat $COMMIT_EDITMSG |grep -i 'merge'|wc -l)
 
 if [ $MERGE -eq 0 ] ; then
