@@ -14,7 +14,7 @@
     function pesquisarPullRequest () {
         var regex = new RegExp(/key=([0-9]+)/g);
         var numeroSms = regex.exec(window.location.href)[1];
-        var linkPullRequest = "https://github.com/pulls?utf8=%E2%9C%93&q=is%3Aopen+is%3Apr+" + numeroSms + "+user%3Abennersaude";
+        var linkPullRequest = "https://github.com/pulls?utf8=%E2%9C%93&q=is%3Apr+" + numeroSms + "+user%3Abennersaude";
         
         return "window.open('"+linkPullRequest+"', '_blank');";
     };
