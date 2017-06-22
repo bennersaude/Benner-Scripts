@@ -5,7 +5,7 @@
 // @description  Adiciona botão para pull request da SMS
 // @author       José Carlos S. A. Tissei
 // @include      https://siscon.benner.com.br/siscon/e/solicitacoes/Solicitacao.aspx*
-// @updateURL    https://github.com/bennersaude/Benner-Scripts/raw/botao-pr/Tampermonkey/botao-pull-request/BotaoPullRequest.user.js
+// @updateURL    https://github.com/bennersaude/Benner-Scripts/raw/master/Tampermonkey/botao-pull-request/BotaoPullRequest.user.js
 // @grant GM_addStyle
 // @run-at document-end
 // ==/UserScript==
