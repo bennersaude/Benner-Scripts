@@ -10,7 +10,7 @@
 // @grant unsafeWindow
 // @require      https://code.jquery.com/jquery-latest.js
 // @run-at document-end
-// @downloadURL  https://github.com/bennersaude/Benner-Scripts/raw/master/Tampermonkey/detalhes-sms-pull-request/BennerDetalhesSMSGithub.user.js
+// @downloadURL  https://gist.githubusercontent.com/hugoj-goncalves/b2149d85c8a3cf370f8487af0c7f74c2/raw/BennerDetalhesSMSGithub.user.js
 // ==/UserScript==
 
 (function() {
@@ -36,9 +36,9 @@
         var repoMatches = /([^\/]+)\/pull\/\d+/gi.exec(fullUrl);
         var repo = repoMatches && repoMatches.length > 1 ? repoMatches[1] : undefined;
         return function(pullRequestData) {
-            var smsMatches = /from\n*.*SMS\/(\d+)/gmi.exec(pullRequestData);
-            if (smsMatches && smsMatches.length > 1) {
-                var sms = smsMatches[1];
+            var smsMatches = /from\n*.*(SMS|hotfix)\/(\d+)/gmi.exec(pullRequestData);
+            if (smsMatches && smsMatches.length > 2) {
+                var sms = smsMatches[2];
                 var newElementLocation = $(issueElement).children().children(".float-left:last");
                 var sisconUrl = "https://siscon.benner.com.br/siscon/e/solicitacoes/Solicitacao.aspx?key=" + sms;
                 var newElement = "<a target=\"_blank\" style=\"box-shadow: none;color: black;\" class=\"label v-align-text-top labelstyle-fc2929 linked-labelstyle-fc2929\" href=\"" + sisconUrl + "\"><img height=\"15px\" src=\"" + sisconIco + "\" />";
