@@ -22,6 +22,10 @@
 
     function proccess(initialElement) {
         var issuesElements = $(initialElement).find("li[id^=issue]");
+
+        var issueBox = issuesElements.parents("div.container").parent("div");
+        issueBoxObserver(issueBox);
+
         for (var i = 0; i < issuesElements.length; i++) {
             var matches = issuesElements[i].outerHTML.match(/\".*?pull\/\d+\"/g);
             var pr = matches[0];
@@ -40,8 +44,12 @@
             if (smsMatches && smsMatches.length > 2) {
                 var sms = smsMatches[2];
                 var newElementLocation = $(issueElement).children().children(".float-left:last");
+                var addedAlready = newElementLocation.find(".hjg-sms-btn");
+                if (addedAlready && addedAlready.length)
+                    return;
+                
                 var sisconUrl = "https://siscon.benner.com.br/siscon/e/solicitacoes/Solicitacao.aspx?key=" + sms;
-                var newElement = "<a target=\"_blank\" style=\"box-shadow: none;color: black;\" class=\"label v-align-text-top labelstyle-fc2929 linked-labelstyle-fc2929\" href=\"" + sisconUrl + "\"><img height=\"15px\" src=\"" + sisconIco + "\" />";
+                var newElement = "<a target=\"_blank\" style=\"box-shadow: none;color: black;\" class=\"hjg-sms-btn label v-align-text-top labelstyle-fc2929 linked-labelstyle-fc2929\" href=\"" + sisconUrl + "\"><img height=\"15px\" src=\"" + sisconIco + "\" />";
                 if (showSms)
                     newElement += sms;
                 newElement += "</a>";
@@ -49,6 +57,24 @@
             }
         };
     }
+
+    function issueBoxObserver(target) {
+        target = target[0];
+
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.addedNodes.length > 0) {
+                    proccess($(document.body));
+                }
+            });
+        });
+
+        var config = { attributes: true, childList: true, subtree: false, characterData: true };
+
+        observer.observe(target, config);
+        return observer;
+    }
+
 
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
