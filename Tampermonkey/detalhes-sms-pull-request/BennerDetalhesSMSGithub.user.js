@@ -10,7 +10,7 @@
 // @grant unsafeWindow
 // @require      https://code.jquery.com/jquery-latest.js
 // @run-at document-end
-// @downloadURL  https://gist.githubusercontent.com/hugoj-goncalves/b2149d85c8a3cf370f8487af0c7f74c2/raw/BennerDetalhesSMSGithub.user.js
+// @downloadURL  https://github.com/bennersaude/Benner-Scripts/raw/master/Tampermonkey/detalhes-sms-pull-request/BennerDetalhesSMSGithub.user.js
 // ==/UserScript==
 
 (function() {
