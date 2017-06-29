@@ -61,35 +61,28 @@
     }
 
     function proccessPRUrl(url, newElementLocation, cb) {
-        var getFn = $.get;
-        if (!queryBeforehand)
-            getFn = fakeGet;
-
-        getFn(url, generateElementToAdd(url, function (elementToAdd) {
+        generateElementToAdd(url, !queryBeforehand, function (elementToAdd) {
             cb(newElementLocation, elementToAdd);
-        }));
+        });
     }
 
     function fakeGet(url, cb) {
         cb(undefined);
     }
 
-    function generateElementToAdd(url, cb) {
+    function generateElementToAdd(url, cacheOnly, cb) {
         var repoMatches = /([^\/]+)\/pull\/\d+/gi.exec(url);
         var repo = repoMatches && repoMatches.length > 1 ? repoMatches[1] : undefined;
 
-        return function(pullRequestData) {
-            var styleElement = "style=\"box-shadow: none;color: black!important;background-color:transparent!important;vertical-align:middle!important\"";
-            var newElement = "<a target=\"_blank\" " + styleElement + " class=\"hjg-sms-btn label v-align-text-top labelstyle-fc2929 linked-labelstyle-fc2929\" href=\"#\"><img height=\"15px\" src=\"" + sisconIco + "\" />";
-            getLocationForPR(url, pullRequestData, newElement).then(function(newLocation) {
-                newElement += "</a>";
+        var styleElement = "style=\"box-shadow: none;color: black!important;background-color:transparent!important;vertical-align:middle!important\"";
+        var newElement = "<a target=\"_blank\" " + styleElement + " class=\"hjg-sms-btn label v-align-text-top labelstyle-fc2929 linked-labelstyle-fc2929\" href=\"#\"><img height=\"15px\" src=\"" + sisconIco + "\" /></a>";
 
-                var jqueryNewElement = $(newElement);
-                jqueryNewElement.on("click", clickAction(url, newLocation));
+        getLocationForPR(url, cacheOnly).then(function(newLocation) {
+            var jqueryNewElement = $(newElement);
+            jqueryNewElement.on("click", clickAction(url, newLocation));
 
-                cb(jqueryNewElement);
-            });
-        };
+            cb(jqueryNewElement);
+        });
     }
 
     function clickAction(fullUrl, newLocation) {
@@ -100,13 +93,11 @@
             win.blur();
 
             if (!newLocation) {
-                $.get(fullUrl, function(pullRequestData) {
-                    getLocationForPR(fullUrl, pullRequestData)
-                        .then(function(result) {
+                getLocationForPR(fullUrl, false)
+                    .then(function(result) {
 
-                        newLocation = result;
-                        updateWindow(newLocation, win);
-                    });
+                    newLocation = result;
+                    updateWindow(newLocation, win);
                 });
             } else {
                 updateWindow(newLocation, win);
@@ -124,7 +115,9 @@
         }
     }
 
-    function getLocationForPR(fullUrl, pullRequestData, newElement) {
+    function getLocationForPR(fullUrl, cacheOnly) {
+        cacheOnly = typeof cacheOnly === "undefined" ? true : cacheOnly;
+
         var dfd = $.Deferred();
 
         localforage.startsWith(dbPrefix + fullUrl)
@@ -144,21 +137,23 @@
                 return result;
             }
 
-            if (!pullRequestData) {
+            if (cacheOnly) {
                 dfd.resolve(undefined);
                 return undefined;
             }
 
-            var newLocation;
+            $.get(fullUrl, function (pullRequestData) {
+                var newLocation;
 
-            var smsMatches = /from\n*.*(SMS|hotfix)\/(\d+)/gmi.exec(pullRequestData);
-            if (smsMatches && smsMatches.length > 2) {
-                var sms = smsMatches[2];
-                newLocation = "https://siscon.benner.com.br/siscon/e/solicitacoes/Solicitacao.aspx?key=" + sms;
-            }
+                var smsMatches = /from\n*.*(SMS|hotfix)\/(\d+)/gmi.exec(pullRequestData);
+                if (smsMatches && smsMatches.length > 2) {
+                    var sms = smsMatches[2];
+                    newLocation = "https://siscon.benner.com.br/siscon/e/solicitacoes/Solicitacao.aspx?key=" + sms;
+                }
 
-            localforage.setItem(dbPrefix + fullUrl + "_" + new Date().getTime(), newLocation);
-            dfd.resolve(newLocation);
+                localforage.setItem(dbPrefix + fullUrl + "_" + new Date().getTime(), newLocation);
+                dfd.resolve(newLocation);
+            });
         });
 
         return dfd.promise();
