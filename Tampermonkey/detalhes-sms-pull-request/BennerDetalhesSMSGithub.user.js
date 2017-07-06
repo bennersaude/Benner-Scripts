@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name         Benner - Detalhes SMS por PR
 // @namespace    Benner
-// @version      0.0.2
+// @version      0.0.3
 // @description  Detalhes SMS por PR
 // @author       Hugo José Gonçalves
+// @include      https://siscon.benner.com.br/*BDSMSPR=1
 // @include      https://*github.com*
 // @grant GM_addStyle
 // @grant unsafeWindow
@@ -18,10 +19,18 @@
 (function() {
     "use strict";
 
-    var dbPrefix = "BDSMSPR_";
+    var internalScriptKey = "BDSMSPR";
+    var dbPrefix = internalScriptKey + "_";
 
     var cacheDays = 7;
-    var queryBeforehand = false;
+    var queryBeforehand = true;
+
+    // DO NOT CHANGE
+    // SISCON Token?
+    var ctl100_token_val = "wsMv7QB+un3vBt7uqPf943JQVGK5oNWy+74P5e86FWawSVKxWOWt4hAgHez/8VB3KUI8na455UXpjk5X1ZrqzRT3aFmtA/lzu8W6bVu91xk=";
+    var sisconToken = "&p=1&vst=d5812344-c333-4b47-974d-b7eec54b5b35";
+    var organizationName = "bennersaude";
+    var uniqueUrlInternalToken = internalScriptKey + "=1";
 
     localforage.getItem(dbPrefix + 'queryBeforehand')
         .then(function(result) {
@@ -148,7 +157,7 @@
                 var smsMatches = /from\n*.*(SMS|hotfix)\/(\d+)/gmi.exec(pullRequestData);
                 if (smsMatches && smsMatches.length > 2) {
                     var sms = smsMatches[2];
-                    newLocation = "https://siscon.benner.com.br/siscon/e/solicitacoes/Solicitacao.aspx?key=" + sms;
+                    newLocation = "https://siscon.benner.com.br/siscon/e/solicitacoes/Solicitacao.aspx?key=" + sms + sisconToken + "&" + uniqueUrlInternalToken;
                 }
 
                 localforage.setItem(dbPrefix + fullUrl + "_" + new Date().getTime(), newLocation);
@@ -235,12 +244,20 @@
     }
 
     function start() {
-        if (window.location.href.match(/\/pull\//gi)) {
+        var reSiscon = new RegExp("siscon\.benner\.com\.br.*" + uniqueUrlInternalToken, "gi");
+        if (window.location.href.match(reSiscon)) {
+            $("#ctl00___token").val(ctl100_token_val);
+            return;
+        }
+
+        var rePull = new RegExp("\/" + organizationName + "\/.*\/pull\/", "gi");
+        var rePulls = new RegExp("\/" + organizationName + "\/.*\/pulls", "gi");
+        if (window.location.href.match(rePull)) {
             var newElementLocation = $(document.body).find(".gh-header-title");
             proccessPRUrl(window.location.href, newElementLocation, function(newElementLocation, elementToAdd) {
                 newElementLocation.append(elementToAdd);
             });
-        } else if (window.location.href.match(/\/pulls/gi)) {
+        } else if (window.location.href.match(rePulls)) {
             proccess($(document.body));
         }
 
