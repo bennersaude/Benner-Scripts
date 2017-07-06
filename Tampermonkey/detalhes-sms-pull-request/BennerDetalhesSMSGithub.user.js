@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Benner - Detalhes SMS por PR
 // @namespace    Benner
-// @version      0.0.3
+// @version      0.0.4
 // @description  Detalhes SMS por PR
 // @author       Hugo José Gonçalves
 // @include      https://siscon.benner.com.br/*BDSMSPR=1
@@ -27,6 +27,7 @@
 
     // DO NOT CHANGE
     // SISCON Token?
+    var useToken = false;
     var ctl100_token_val = "wsMv7QB+un3vBt7uqPf943JQVGK5oNWy+74P5e86FWawSVKxWOWt4hAgHez/8VB3KUI8na455UXpjk5X1ZrqzRT3aFmtA/lzu8W6bVu91xk=";
     var sisconToken = "&p=1&vst=d5812344-c333-4b47-974d-b7eec54b5b35";
     var organizationName = "bennersaude";
@@ -157,7 +158,9 @@
                 var smsMatches = /from\n*.*(SMS|hotfix)\/(\d+)/gmi.exec(pullRequestData);
                 if (smsMatches && smsMatches.length > 2) {
                     var sms = smsMatches[2];
-                    newLocation = "https://siscon.benner.com.br/siscon/e/solicitacoes/Solicitacao.aspx?key=" + sms + sisconToken + "&" + uniqueUrlInternalToken;
+                    newLocation = "https://siscon.benner.com.br/siscon/e/solicitacoes/Solicitacao.aspx?key=" + sms;
+                    if (useToken)
+                        newLocation += sisconToken + "&" + uniqueUrlInternalToken;
                 }
 
                 localforage.setItem(dbPrefix + fullUrl + "_" + new Date().getTime(), newLocation);
@@ -246,7 +249,8 @@
     function start() {
         var reSiscon = new RegExp("siscon\.benner\.com\.br.*" + uniqueUrlInternalToken, "gi");
         if (window.location.href.match(reSiscon)) {
-            $("#ctl00___token").val(ctl100_token_val);
+            if (useToken)
+                $("#ctl00___token").val(ctl100_token_val);
             return;
         }
 
