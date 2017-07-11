@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Benner - Detalhes SMS por PR
 // @namespace    Benner
-// @version      0.0.5
+// @version      0.0.6
 // @description  Detalhes SMS por PR
 // @author       Hugo José Gonçalves
 // @include      https://siscon.benner.com.br/*BDSMSPR=*
@@ -51,8 +51,7 @@
         for (var i = 0; i < issuesElements.length; i++) {
             var issueElement = issuesElements[i];
             var newElementLocation = $(issueElement).children().children(".float-left:last");
-            var addedAlready = newElementLocation.find(".hjg-sms-btn");
-            if (addedAlready && addedAlready.length)
+            if (isAlreadyAdded(newElementLocation))
                 return;
 
             var matches = issuesElements[i].outerHTML.match(/\".*?pull\/\d+\"/g);
@@ -73,8 +72,9 @@
         });
     }
 
-    function fakeGet(url, cb) {
-        cb(undefined);
+    function isAlreadyAdded(newElementLocation) {
+        var addedAlready = newElementLocation.find(".hjg-sms-btn");
+        return addedAlready && addedAlready.length;
     }
 
     function generateElementToAdd(url, cacheOnly, cb) {
@@ -255,6 +255,8 @@
         if (window.location.href.match(rePull)) {
             var newElementLocation = $(document.body).find(".gh-header-title");
             proccessPRUrl(window.location.href, newElementLocation, function(newElementLocation, elementToAdd) {
+                if (isAlreadyAdded(newElementLocation))
+                    return;
                 newElementLocation.append(elementToAdd);
             });
         } else if (window.location.href.match(rePulls)) {
