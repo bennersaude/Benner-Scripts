@@ -1,6 +1,6 @@
 #!/bin/bash
 
-branchEncontrada=$(gcheckouts.sh | grep -iP "$1" | tail -5)
+branchEncontrada=$(gcheckouts.sh | grep -iP "$1" | tac | awk '!x[$0]++' | head -5 | tac)
 
 array=($branchEncontrada)
 arraylength=${#array[@]}
