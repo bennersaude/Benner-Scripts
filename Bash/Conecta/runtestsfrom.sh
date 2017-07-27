@@ -15,6 +15,7 @@ else
 fi
 
 echo "Running tests..."
+echo "$NUNIT_EXE $DLLS //nologo"
 
 start_time=`date +%s`
 TRESULT="$("$NUNIT_EXE" $DLLS //nologo)"

@@ -30,7 +30,7 @@ publishPathRaw="$publishPath"RAW
 pushd "$solutiondir"
 
 function build() {
-  build.sh -d "$solutiondir" -f "$filename" -p "//p:Configuration=$CONFIGURATION //p:OutputPath=bin\\ //t:WebPublish //p:WebPublishMethod=FileSystem //p:DeleteExistingFiles=True //p:publishUrl=$publishPathRaw //p:SolutionDir=$windowsSolutionPath\\"
+  build.sh -d "$solutiondir" -f "$filename" -p "$MSBUILD_COMMON_PARAMS //p:Configuration=$CONFIGURATION //p:OutputPath=bin\\ //t:WebPublish //p:WebPublishMethod=FileSystem //p:DeleteExistingFiles=True //p:publishUrl=$publishPathRaw //p:SolutionDir=$windowsSolutionPath\\"
 }
 
 windowsSolutionPath=$(convertPathToWindows "$solutiondir")
