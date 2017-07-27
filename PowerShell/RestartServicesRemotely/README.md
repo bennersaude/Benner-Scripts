@@ -6,6 +6,6 @@
 
 #### Exemplo:
 
- ```vb
+ ```PowerShell
 RestartServicesRemotely.ps1 -hostNames "mga-tc001", "mga-tc002", "mga-tc004" -services "TeamCity Server", "Reintegrador"
  ```
