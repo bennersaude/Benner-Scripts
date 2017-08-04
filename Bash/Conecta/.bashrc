@@ -23,6 +23,8 @@ alias publishconectatestedebug='publish.sh -d "$CONECTA_DIR" -f "Benner.Conecta.
 
 alias updateconectatestsfolder='pushd $CONECTA_DIR && cmd <<< "\"$MSBUILD\" Conecta-coverage.sln /t:Build /p:Configuration=Loc.SqlS.Debug /p:OutputPath=C:\ConectaDllsForTests" && cd /c/ConectaDllsForTests && sed -i '\''s/add name="BennerConecta" connectionString="Data Source=(local);Initial Catalog=conecta/add name="BennerConecta" connectionString="Data Source=(local);Initial Catalog=conectaintegrationtest/g'\'' Benner.Conecta.IntegrationTest.dll.config && popd'
 
-alias buildinfradebug='build.sh -d "$INFRA_DIR" -f Benner.Infra.sln -p "//p:Configuration=Debug"'
-alias buildconectadebug='build.sh -d "$CONECTA_DIR" -f "Conecta-coverage.sln" -p "//p:Configuration=Loc.SqlS.Debug"'
-alias buildconectarelease='build.sh -d "$CONECTA_DIR" -f "Conecta-coverage.sln" -p "//p:Configuration=Loc.SqlS.Release"'
+alias buildinfradebug='build.sh -d "$INFRA_DIR" -f Benner.Infra.sln -p "$MSBUILD_COMMON_PARAMS //p:Configuration=Debug"'
+alias buildconectadebug='build.sh -d "$CONECTA_DIR" -f "Conecta-coverage.sln" -p "$MSBUILD_COMMON_PARAMS //p:Configuration=Loc.SqlS.Debug"'
+alias buildconectarelease='build.sh -d "$CONECTA_DIR" -f "Conecta-coverage.sln" -p "$MSBUILD_COMMON_PARAMS //p:Configuration=Loc.SqlS.Release"'
+
+alias sassconecta='pushd $CONECTA_DIR && cd Benner.Conecta.Portal && ./node_modules/.bin/gulp sass && popd'
