@@ -77,5 +77,3 @@ fi
 
 option=${options[$optionMap]}
 publishChoosenOne $option
-
-exit 1
