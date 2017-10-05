@@ -14,12 +14,14 @@ alias sonarconecta='pushd $CONECTA_DIR && cd Tools && cmd <<< RunSonar.bat && po
 alias generatehtmltemplates='pushd $CONECTA_DIR && cd Benner.Conecta.Portal/assets/global/template && python convert-HtmlAngular.py && popd'
 alias currentinfraversion='cat $CONECTA_DIR/Benner.Conecta.Portal/packages.config | grep -oP "Benner.Infra\"\s*version=\"[^\"]+\"" | grep -oP "[0-9][^\"]+"'
 
-alias publishjobsrelease='publish.sh -d "$CONECTA_DIR" -f "Benner.Conecta.Jobs/Web/Benner.Conecta.Jobs.WebApplication.csproj" -c "Loc.SqlS.Release" -p "C:\inetpub\wwwroot\Jobs"'
-alias publishjobstesterelease='publish.sh -d "$CONECTA_DIR" -f "Benner.Conecta.Jobs/Web/Benner.Conecta.Jobs.WebApplication.csproj" -c "Loc.SqlS.Release" -p "C:\inetpub\wwwroot\Jobs" && cd /c/inetpub/wwwroot/Jobs && sed -i '\''s/=conecta;/=conectateste;/g'\'' Web.config && sed -i '\''s/http:\/\/localhost:50659\/Conecta/http:\/\/localhost\/ConectaTeste/g'\'' Web.config && sed -i '\''s/=\"local\"/=\"loctest\"/g'\'' Web.config && cd -'
-alias publishconectarelease='publish.sh -d "$CONECTA_DIR" -f "Benner.Conecta.Portal/Benner.Conecta.Portal.csproj" -c "Loc.SqlS.Release"'
-alias publishconectadebug='publish.sh -d "$CONECTA_DIR" -f "Benner.Conecta.Portal/Benner.Conecta.Portal.csproj" -c "Loc.SqlS.Debug"'
-alias publishconectatesterelease='publish.sh -d "$CONECTA_DIR" -f "Benner.Conecta.Portal/Benner.Conecta.Portal.csproj" -c "LocTst.SqlS.Release" -p "C:\inetpub\wwwroot\ConectaTeste"'
-alias publishconectatestedebug='publish.sh -d "$CONECTA_DIR" -f "Benner.Conecta.Portal/Benner.Conecta.Portal.csproj" -c "LocTst.SqlS.Debug" -p "C:\inetpub\wwwroot\ConectaTeste"'
+alias publishjobsrelease='echo 1 | publishhelper.sh'
+alias publishjobstesterelease='echo 1 | publishhelper.sh && cd /c/inetpub/wwwroot/Jobs && sed -i '\''s/=conecta;/=conectateste;/g'\'' Web.config && sed -i '\''s/http:\/\/localhost:50659\/Conecta/http:\/\/localhost\/ConectaTeste/g'\'' Web.config && sed -i '\''s/=\"local\"/=\"loctest\"/g'\'' Web.config && cd -'
+alias publishconectarelease='echo 2 | publishhelper.sh'
+alias publishconectadebug='echo 2 | publishhelper.sh -d'
+alias publishconectatesterelease='echo 2 | publishhelper.sh -c "LocTst.SqlS.Release" -p "C:\inetpub\wwwroot\ConectaTeste"'
+alias publishconectatestedebug='echo 2 | publishhelper.sh -d -c "LocTst.SqlS.Debug" -p "C:\inetpub\wwwroot\ConectaTeste"'
+alias publishapirelease='echo 4 | publishhelper.sh'
+alias publishrouterelease='echo 3 | publishhelper.sh'
 
 alias updateconectatestsfolder='pushd $CONECTA_DIR && cmd <<< "\"$MSBUILD\" Conecta-coverage.sln /t:Build /p:Configuration=Loc.SqlS.Debug /p:OutputPath=C:\ConectaDllsForTests" && cd /c/ConectaDllsForTests && sed -i '\''s/add name="BennerConecta" connectionString="Data Source=(local);Initial Catalog=conecta/add name="BennerConecta" connectionString="Data Source=(local);Initial Catalog=conectaintegrationtest/g'\'' Benner.Conecta.IntegrationTest.dll.config && popd'
 
@@ -28,3 +30,6 @@ alias buildconectadebug='build.sh -d "$CONECTA_DIR" -f "Conecta-coverage.sln" -p
 alias buildconectarelease='build.sh -d "$CONECTA_DIR" -f "Conecta-coverage.sln" -p "$MSBUILD_COMMON_PARAMS //p:Configuration=Loc.SqlS.Release"'
 
 alias sassconecta='pushd $CONECTA_DIR && cd Benner.Conecta.Portal && ./node_modules/.bin/gulp sass && popd'
+
+alias dockergc='docker rmi $(docker images -f "dangling=true" -q)'
+alias dockerrmall='docker rm -f $(docker ps -a -q)'

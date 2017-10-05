@@ -12,12 +12,14 @@ fi
 params=''
 filename=''
 solutiondir=''
+singleOutputPath='0'
 
-while getopts 'd:f:p:' flag; do
+while getopts 'd:f:p:s' flag; do
   case "${flag}" in
     d) solutiondir="${OPTARG}" ;;
     p) params="${OPTARG}" ;;
     f) filename="${OPTARG}" ;;
+    s) singleOutputPath="1" ;;
     *) error "Unexpected option ${flag}" ;;
   esac
 done
@@ -27,12 +29,20 @@ if [[ -z "$filename" ]]; then
 	exit 1
 fi
 
+filenameWithoutDir=$(basename "$fullfile")
+extension="${filenameWithoutDir##*.}"
+directory=$(dirname "$filename")
+
+if [[ $filenameWithoutDir == *.sln ]]; then
+  solutiondir="$directory"
+fi
 if [[ -n "$solutiondir" ]]; then
 	pushd "$solutiondir"
 fi
-
-filenameWithoutDir=$(basename "$filename")
-directory=$(dirname "$filename")
+if [[ (-n "$solutiondir") && ($singleOutputPath -eq "1") ]]; then
+  windowsSolutionPath=$(convertPathToWindows "$solutiondir")
+	params="$params //p:OutputPath=$windowsSolutionPath\SingleBin"
+fi
 
 if [[ -z "$solutiondir" ]]; then
 	$nuget restore "$filename"
