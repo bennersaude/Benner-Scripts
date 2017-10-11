@@ -6,7 +6,7 @@
 // @author       José Carlos S. A. Tissei
 // @contributor  Hugo José Gonçalves
 // @include      https://siscon.benner.com.br/siscon/e/solicitacoes/Solicitacao.aspx*
-// @updateURL    https://github.com/bennersaude/Benner-Scripts/raw/master/Tampermonkey/botao-pull-request/BotaoPullRequest.user.js
+// @updateURL    https://github.com/bennersaude/Benner-Scripts/raw/master/General/Tampermonkey/botao-pull-request/BotaoPullRequest.user.js
 // @grant GM_addStyle
 // @run-at document-end
 // ==/UserScript==

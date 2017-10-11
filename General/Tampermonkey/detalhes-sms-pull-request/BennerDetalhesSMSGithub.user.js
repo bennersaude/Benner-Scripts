@@ -13,7 +13,7 @@
 // @require      https://raw.githubusercontent.com/localForage/localForage-startsWith/f5f37f103b53cc84317c59edb38dc43033065740/dist/localforage-startswith.js
 // @require      https://cdnjs.cloudflare.com/ajax/libs/mousetrap/1.6.1/mousetrap.min.js
 // @run-at document-end
-// @downloadURL  https://github.com/bennersaude/Benner-Scripts/raw/master/Tampermonkey/detalhes-sms-pull-request/BennerDetalhesSMSGithub.user.js
+// @downloadURL  https://github.com/bennersaude/Benner-Scripts/raw/master/General/Tampermonkey/detalhes-sms-pull-request/BennerDetalhesSMSGithub.user.js
 // ==/UserScript==
 
 (function() {
