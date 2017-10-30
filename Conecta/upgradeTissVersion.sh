@@ -6,13 +6,13 @@ source "$my_dir/utils.sh"
 
 # TODO - Add command line params
 # Configs section
-fromTISS="30301"
-toTISS="30302"
+fromTISS="30201"
+toTISS="30200"
 # End Configs section
 
 # Generate Compact Versions
-fromTISSCompact=$(echo "$fromTISS" | sed -e 's/0//g')
-toTISSCompact=$(echo "$toTISS" | sed -e 's/0//g')
+fromTISSCompact=${fromTISS:0:1}${fromTISS:2:1}${fromTISS:4:1}
+toTISSCompact=${toTISS:0:1}${toTISS:2:1}${toTISS:4:1}
 
 # Generate Options Array
 fromTISSOptions=()
@@ -34,12 +34,12 @@ function replicateFolders() {
         allFoldersFromTISS=()
         while IFS=  read -r -d $'\0'; do
             allFoldersFromTISS+=("$REPLY")
-        done < <(find . -iname *${fromTISSOptions[$option]}* -not -path '**/obj/**' -not -path '**/bin/**' -print0)
+        done < <(find . -iname *${fromTISSOptions[$option]}* -not -path '**/obj/**' -not -path '**/bin/**' -not -path '**/.git/**' -print0)
 
         for tissFolder in "${allFoldersFromTISS[@]}"; do
             newFolder=$(echo "$tissFolder" | sed -e "s/${fromTISSOptions[$option]}/${toTISSOptions[$option]}/g")
             cp -r "$tissFolder" "$newFolder"
-            echo "$newFolder"
+            echo "$tissFolder - $newFolder"
         done
     done
 }
@@ -49,7 +49,7 @@ function updateAllGeneratedCsFiles() {
         allFoldersToTISS=()
         while IFS=  read -r -d $'\0'; do
             allFoldersToTISS+=("$REPLY")
-        done < <(find . -iname *${toTISSOptions[$option]}* -not -path '**/obj/**' -not -path '**/bin/**' -print0)
+        done < <(find . -iname *${toTISSOptions[$option]}* -not -path '**/obj/**' -not -path '**/bin/**' -not -path '**/.git/**' -print0)
 
         for tissFolder in "${allFoldersToTISS[@]}"; do
             echo "$tissFolder"
@@ -61,7 +61,7 @@ function updateAllGeneratedCsFiles() {
             
             for f in "${allFilesFromFolder[@]}"; do
                 for (( sedOpt = 0; sedOpt < ${#fromTISSOptions[@]}; sedOpt++ )); do
-                    sed -i.bak "s/${fromTISSOptions[$sedOpt]}/${toTISSOptions[$sedOpt]}/g" "$f"
+                    sed -i "s/${fromTISSOptions[$sedOpt]}/${toTISSOptions[$sedOpt]}/g" "$f"
                 done
             done
         done
@@ -72,7 +72,7 @@ function updateAllCsprojs() {
     allCsProjs=()
     while IFS=  read -r -d $'\0'; do
         allCsProjs+=("$REPLY")
-    done < <(find . -iname '*.csproj' -not -path '**/obj/**' -not -path '**/bin/**' -print0)
+    done < <(find . -iname '*.csproj' -not -path '**/obj/**' -not -path '**/bin/**' -not -path '**/.git/**' -print0)
     
     for i in "${allCsProjs[@]}"; do
         for (( option = 0; option < ${#toTISSOptions[@]}; option++ )); do
