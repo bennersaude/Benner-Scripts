@@ -11,17 +11,17 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 // @require      https://code.jquery.com/jquery-latest.js
-// @downloadURL  https://github.com/bennersaude/Benner-Scripts/tree/master/Tampermonkey/Conecta/botao-atualizacao-sistema/botao-atualizacao-sistema.js
-// @updateURL  https://github.com/bennersaude/Benner-Scripts/tree/master/Tampermonkey/Conecta/botao-atualizacao-sistema/botao-atualizacao-sistema.js
+// @downloadURL  https://raw.githubusercontent.com/bennersaude/Benner-Scripts/master/Tampermonkey/Conecta/botao-atualizacao-sistema/botao-atualizacao-sistema.js
+// @updateURL  https://raw.githubusercontent.com/bennersaude/Benner-Scripts/master/Tampermonkey/Conecta/botao-atualizacao-sistema/botao-atualizacao-sistema.js
 // ==/UserScript==
 
-(function () {
+(function() {
     'use strict';
 
-    $(document).ready(function () {
+    $( document ).ready(function() {
         var botaoVoltar = $("a[ng-href*=\"Account/Login\"]");
 
-        if (!botaoVoltar.is(":visible")) return;
+        if(!botaoVoltar.is(":visible")) return;
 
         var urlVoltar = botaoVoltar.attr("href");
         var urlAtualizacaoSistema = urlVoltar.replace("Account/Login", "AdmSistema/AtualizacoesSistema");
