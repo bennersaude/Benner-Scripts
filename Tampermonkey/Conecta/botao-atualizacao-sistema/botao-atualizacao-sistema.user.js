@@ -11,8 +11,8 @@
 // @grant        GM_addStyle
 // @grant        GM_getResourceText
 // @require      https://code.jquery.com/jquery-latest.js
-// @downloadURL  https://raw.githubusercontent.com/bennersaude/Benner-Scripts/master/Tampermonkey/Conecta/botao-atualizacao-sistema/botao-atualizacao-sistema.js
-// @updateURL  https://raw.githubusercontent.com/bennersaude/Benner-Scripts/master/Tampermonkey/Conecta/botao-atualizacao-sistema/botao-atualizacao-sistema.js
+// @downloadURL  https://raw.githubusercontent.com/bennersaude/Benner-Scripts/master/Tampermonkey/Conecta/botao-atualizacao-sistema/botao-atualizacao-sistema.user.js
+// @updateURL  https://raw.githubusercontent.com/bennersaude/Benner-Scripts/master/Tampermonkey/Conecta/botao-atualizacao-sistema/botao-atualizacao-sistema.user.js
 // ==/UserScript==
 
 (function() {
