@@ -6,6 +6,7 @@
 // @author       Bruno Fernandes
 // @include      https://siscon.benner.com.br/siscon/e/solicitacoes/Atendimento.aspx*
 // @include      https://siscon.benner.com.br/siscon/e/solicitacoes/Solicitacao.aspx*
+// @updateURL    https://github.com/bennersaude/Benner-Scripts/raw/master/Tampermonkey/liberar-uniben/LiberarUniben.js
 // @grant        none
 // @run-at document-end
 // ==/UserScript==
