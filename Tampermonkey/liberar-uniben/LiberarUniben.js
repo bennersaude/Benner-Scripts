@@ -14,7 +14,7 @@
 (function() {
 
     function sendMail() {
-        var host = "CWB-BRUNO"                                                           // Alterar aqui seu host para liberação
+        var host = "Não Definido"                                                           // Alterar aqui seu host para liberação
         if (host == "Não Definido"){ alert("Defina seu HOST no script \"Liberar Uniben\"") };
         var regex = new RegExp(/key=([0-9]+)/g);
         var numeroSms = regex.exec(window.location.href)[1];
