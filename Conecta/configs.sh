@@ -32,4 +32,5 @@ DEFAULT_PUBLISH_PATH="$DEFAULT_CONECTA_PORTAL_PUBLISH_PATH"
 
 SITE_NAME='Benner.Conecta.Portal-Site'
 SITE_NAME_JOBS='Benner.Conecta.Jobs.WebApplication-Site'
+SITE_NAME_ROUTING='Benner.Conecta.RoutingService'
 MSBUILD_COMMON_PARAMS='//p:BuildInParallel=true //p:WarningLevel=0 //v:m //m'

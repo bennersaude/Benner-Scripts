@@ -33,3 +33,6 @@ alias sassconecta='pushd $CONECTA_DIR && cd Benner.Conecta.Portal && ./node_modu
 
 alias dockergc='docker rmi $(docker images -f "dangling=true" -q)'
 alias dockerrmall='docker rm -f $(docker ps -a -q)'
+
+alias dockerrunconecta='rundockerwebapp.sh -n "Conecta" -d "/c/inetpub/wwwroot/Conecta" -p 9000'
+alias dockerrunjobs='rundockerwebapp.sh -n "Jobs" -d "/c/inetpub/wwwroot/Jobs" -p 9001'
