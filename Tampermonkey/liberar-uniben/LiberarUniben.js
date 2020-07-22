@@ -21,9 +21,9 @@
         var saudacao = "Boa noite!"
         if (new Date().getHours() < 12){saudacao = "Bom dia!"}
            else if (new Date().getHours() >= 12 && new Date().getHours() < 19) {saudacao = "Boa tarde!"}
-        var link = "mailto:alexiades.scalfo@unimedcuritiba.com.br;amanda.lopes@unimedcuritiba.com.br"
-             + "?&subject=" + escape("Liberar UNIBEN")
-             + "&body=" + escape(saudacao + "%0D%0A%0D%0A" + host + "%0D%0ASMS " + numeroSms + "%0D%0A%0D%0AAtenciosamente,")
+        var link = "mailto:alexiades.scalfo@unimedcuritiba.com.br;amanda.lopes@unimedcuritiba.com.br;hilton@unimedcuritiba.com.br;marcella.britto@unimedcuritiba.com.br"
+             + "?subject=" + encodeURIComponent("Liberar UNIBEN")
+             + "&body=" + encodeURIComponent(saudacao + "%0D%0A%0D%0A" + host + "%0D%0ASMS " + numeroSms + "%0D%0A%0D%0AAtenciosamente,")
         ;
 
         return "window.open('" + link + "', '_self'); ";
